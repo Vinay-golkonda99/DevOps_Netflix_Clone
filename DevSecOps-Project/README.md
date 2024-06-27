@@ -1,28 +1,12 @@
-<div align="center">
-  <img src="./public/assets/DevSecOps.png" alt="Logo" width="100%" height="100%">
+**INSPIRED FROM CLOUD-CHAMP OF THE VIDEO BELOW:**
 
-  <br>
-  <a href="http://netflix-clone-with-tmdb-using-react-mui.vercel.app/">
-    <img src="./public/assets/netflix-logo.png" alt="Logo" width="100" height="32">
-  </a>
-</div>
-
-<br />
-
-<div align="center">
-  <img src="./public/assets/home-page.png" alt="Logo" width="100%" height="100%">
-  <p align="center">Home Page</p>
-</div>
+**Do check out his channel for full-project walkthorugh**
 
 # **Youtube Video for step by step Demonstration!**
 [![Video Tutorial](https://img.youtube.com/vi/g8X5AoqCJHc/0.jpg)](https://youtu.be/g8X5AoqCJHc)
 
 
-## Susbcribe:
-[https://www.youtube.com/@cloudchamp?
-](https://www.youtube.com/@cloudchamp?sub_confirmation=1)
-
-# Deploy Netflix Clone on Cloud using Jenkins - DevSecOps Project!
+# DevOps Project!
 
 ### **Phase 1: Initial Setup and Deployment**
 
@@ -184,54 +168,6 @@ We will install a sonar scanner in the tools.
 Create a Jenkins webhook
 
 1. **Configure CI/CD Pipeline in Jenkins:**
-- Create a CI/CD pipeline in Jenkins to automate your application deployment.
-
-```groovy
-pipeline {
-    agent any
-    tools {
-        jdk 'jdk17'
-        nodejs 'node16'
-    }
-    environment {
-        SCANNER_HOME = tool 'sonar-scanner'
-    }
-    stages {
-        stage('clean workspace') {
-            steps {
-                cleanWs()
-            }
-        }
-        stage('Checkout from Git') {
-            steps {
-                git branch: 'main', url: 'https://github.com/N4si/DevSecOps-Project.git'
-            }
-        }
-        stage("Sonarqube Analysis") {
-            steps {
-                withSonarQubeEnv('sonar-server') {
-                    sh '''$SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Netflix \
-                    -Dsonar.projectKey=Netflix'''
-                }
-            }
-        }
-        stage("quality gate") {
-            steps {
-                script {
-                    waitForQualityGate abortPipeline: false, credentialsId: 'Sonar-token'
-                }
-            }
-        }
-        stage('Install Dependencies') {
-            steps {
-                sh "npm install"
-            }
-        }
-    }
-}
-```
-
-Certainly, here are the instructions without step numbers:
 
 **Install Dependency-Check and Docker Tools in Jenkins**
 
@@ -273,94 +209,6 @@ Certainly, here are the instructions without step numbers:
   - Enter your DockerHub credentials (Username and Password) and give the credentials an ID (e.g., "docker").
   - Click "OK" to save your DockerHub credentials.
 
-Now, you have installed the Dependency-Check plugin, configured the tool, and added Docker-related plugins along with your DockerHub credentials in Jenkins. You can now proceed with configuring your Jenkins pipeline to include these tools and credentials in your CI/CD process.
-
-```groovy
-
-pipeline{
-    agent any
-    tools{
-        jdk 'jdk17'
-        nodejs 'node16'
-    }
-    environment {
-        SCANNER_HOME=tool 'sonar-scanner'
-    }
-    stages {
-        stage('clean workspace'){
-            steps{
-                cleanWs()
-            }
-        }
-        stage('Checkout from Git'){
-            steps{
-                git branch: 'main', url: 'https://github.com/N4si/DevSecOps-Project.git'
-            }
-        }
-        stage("Sonarqube Analysis "){
-            steps{
-                withSonarQubeEnv('sonar-server') {
-                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Netflix \
-                    -Dsonar.projectKey=Netflix '''
-                }
-            }
-        }
-        stage("quality gate"){
-           steps {
-                script {
-                    waitForQualityGate abortPipeline: false, credentialsId: 'Sonar-token' 
-                }
-            } 
-        }
-        stage('Install Dependencies') {
-            steps {
-                sh "npm install"
-            }
-        }
-        stage('OWASP FS SCAN') {
-            steps {
-                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
-                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-            }
-        }
-        stage('TRIVY FS SCAN') {
-            steps {
-                sh "trivy fs . > trivyfs.txt"
-            }
-        }
-        stage("Docker Build & Push"){
-            steps{
-                script{
-                   withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){   
-                       sh "docker build --build-arg TMDB_V3_API_KEY=<yourapikey> -t netflix ."
-                       sh "docker tag netflix nasi101/netflix:latest "
-                       sh "docker push nasi101/netflix:latest "
-                    }
-                }
-            }
-        }
-        stage("TRIVY"){
-            steps{
-                sh "trivy image nasi101/netflix:latest > trivyimage.txt" 
-            }
-        }
-        stage('Deploy to container'){
-            steps{
-                sh 'docker run -d --name netflix -p 8081:80 nasi101/netflix:latest'
-            }
-        }
-    }
-}
-
-
-If you get docker login failed errorr
-
-sudo su
-sudo usermod -aG docker jenkins
-sudo systemctl restart jenkins
-
-
-```
 
 **Phase 4: Monitoring**
 
