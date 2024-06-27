@@ -3,7 +3,7 @@
 **Do check out his channel for full-project walkthorugh**
 
 # **Youtube Video for step by step Demonstration!**
-[![Video Tutorial](https://img.youtube.com/vi/g8X5AoqCJHc/0.jpg)](https://youtu.be/g8X5AoqCJHc)
+https://www.youtube.com/watch?v=g8X5AoqCJHc
 
 
 # DevOps Project!
