@@ -598,3 +598,5 @@ Phase 7: Cleanup
 
 Cleanup AWS EC2 Instances:
 Terminate AWS EC2 instances that are no longer needed.
+
+Reference by CloudChamp
